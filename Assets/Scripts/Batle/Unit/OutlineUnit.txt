@@ -1,0 +1,25 @@
+Unit (MonoBehaviour)
+--unitInfo(UnitInfo)
+--actions(IAction[])
+--baffs(IBuff[])
+
+--hp
+--ap
+
+--Init()
+
+--Hit(int dmg)
+--Action(int ap)
+--Death()
+-------------------------------------------------------------------
+UnitInfo (Scriptable)
+--name
+--prefab
+--state
+-------------------------------------------------------------------
+IAction (Interface)
+--OnUpdate()
+--Start()
+--Destroy()
+--Action()
+--------------------------------------------------------------------
