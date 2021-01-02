@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Batle.UnitCore {
+namespace Battle.UnitCore {
 	[Serializable]
 	public struct UnitState {
 		public int strenght;

@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Batle.UnitCore;
+using Battle.UnitCore;
 
-namespace Batle.System {
+namespace Battle.System {
 	public class BattleSystem : MonoBehaviour {
 
 		[SerializeField]
 		BattleHUD battleHUD;
-
+		[SerializeField]
 		private int countTeam;
-
+		[SerializeField]
 		private int currentTeam = 1;
 
 		private Unit currentUnit;
@@ -18,13 +18,26 @@ namespace Batle.System {
 		public void Init() {
 
 		}
-
+		//Test
 		void Start() {
 			StartCoroutine(Step());
 		}
-
+		//Test
 		IEnumerator Step() {
-			yield return new WaitUntil(ChoiceUnit);
+			battleHUD.SetTeam(currentTeam);
+			Debug.Log($"Start step team {currentTeam}");
+			yield return new WaitUntil(() => {
+				Unit unit = ChoiceTarget();
+				if (!unit) return false;
+				if (unit.team == currentTeam) {
+					if (Input.GetMouseButtonDown(0)) {
+						currentUnit = unit;
+						Debug.Log(currentUnit.name);
+						return true;
+					}
+				}
+				return false;
+			});
 			currentUnit.Activate();
 			battleHUD.SetUnit(currentUnit);
 		}
@@ -34,15 +47,30 @@ namespace Batle.System {
 			return true;
 		}
 		public static Vector3? ChoicePosition() {
-			//Поиск позиции свободной
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if(Physics.Raycast(ray, out hit)) {
+				if (hit.transform.CompareTag("Terrain")) {
+					return hit.point;
+				}
+			}
 			return null;
 		}
 		public static Unit ChoiceTarget() {
-			//поиск юнита
+			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+			RaycastHit hit;
+			if (Physics.Raycast(ray, out hit)) {
+				Unit unit;
+				if (hit.transform.TryGetComponent(out unit)) {
+					return unit;
+				}
+			}
 			return null;
 		}
 		public void EndStep() {
-			currentTeam = currentTeam == countTeam ? 1 : currentTeam++;
+			currentTeam = currentTeam == countTeam ? 1 : currentTeam+1;
+			currentUnit.Disactive();
+			battleHUD.ResetUnit();
 			StartCoroutine(Step());
 		}
 	}

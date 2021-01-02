@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 
-namespace Batle.UnitCore {
-	public class Action : MonoBehaviour{
-		public bool isDefault;
+namespace Battle.UnitCore {
+	public abstract class Action : MonoBehaviour{
 		public Sprite icon;
 		public string nameSkill;
 		public string description;

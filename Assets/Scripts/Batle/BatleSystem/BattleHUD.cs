@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using Batle.UnitCore;
+using Battle.UnitCore;
 
-namespace Batle.System {
+namespace Battle.System {
 	public class BattleHUD : MonoBehaviour {
 
 		[Header("ComponentsUI")]
+		[SerializeField]
+		Text currentTeam;
+		[SerializeField]
+		GameObject unitPanel;
 		[SerializeField]
 		Text hp;
 		[SerializeField]
@@ -20,24 +24,20 @@ namespace Batle.System {
 
 		public void SetUnit(Unit unit) {
 			this.unit = unit;
+			unitPanel.SetActive(true);
 			for(int i = 0; i < unit.actions.Count; i++) {
 				if (unit.actions[i].isActive()) {
 					Action act = unit.actions[i] as Action;
-					if (!act.isDefault) {
-						actions[i].image.sprite = act.icon;
-						actions[i].onClick.AddListener(() => {
-							unit.SetAction(i);
-						});
-					}
+					actions[i].image.sprite = act.icon;
+					actions[i].onClick.AddListener(() => {
+						unit.SetAction(i);
+					});
 				}
 			}
 		}
 		public void ResetUnit() {
 			unit = null;
-			actions.ForEach(p => {
-				p.image = null;
-				p.onClick.RemoveAllListeners();
-			});
+			unitPanel.SetActive(false);
 		}
 
 		void Update() {
@@ -49,6 +49,10 @@ namespace Batle.System {
 			hp.text = unit.hp.ToString();
 			ap.text = unit.ap.ToString();
 
+		}
+
+		public void SetTeam(int team) {
+			currentTeam.text = team.ToString();
 		}
 	}
 }
