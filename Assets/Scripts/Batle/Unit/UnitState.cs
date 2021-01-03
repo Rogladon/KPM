@@ -7,5 +7,6 @@ namespace Battle.UnitCore {
 		public int defense;
 		public int hp;
 		public int ap;
+		public int heelAp;
 	}
 }

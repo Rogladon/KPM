@@ -11,8 +11,25 @@ namespace Battle.UnitCore {
 		public List<IAction> actions { get; private set; }
 		//Buffs
 
-		public int hp { get; private set; }
-		public int ap { get; private set; }
+		public int hp {
+			get {
+				return _hp;
+			}
+			private set {
+				_hp = value <= unitInfo.state.hp ? value : unitInfo.state.hp;
+			}
+		}
+		private int _hp;
+		public int ap {
+			get {
+				return _ap;
+			}
+			private set {
+				_ap = value <= unitInfo.state.ap ? value : unitInfo.state.ap;
+			}
+		}
+		private int _ap;
+		public int heelAp { get; private set; }
 
 		private int strenght;
 		private int defense;
@@ -42,6 +59,7 @@ namespace Battle.UnitCore {
 			agent = GetComponent<NavMeshAgent>();
 			hp = unitInfo.state.hp;
 			ap = unitInfo.state.ap;
+			heelAp = unitInfo.state.heelAp;
 			strenght = unitInfo.state.strenght;
 			defense = unitInfo.state.defense;
 
@@ -63,6 +81,14 @@ namespace Battle.UnitCore {
 			}
 		}
 
+		public void OnStartStep() {
+			HeelAp();
+			actions.ForEach(p => p.OnStartStep());
+		}
+		public void OnEndStep() {
+			actions.ForEach(p => p.OnEndStep());
+		}
+
 		public void Hit(int dmg) {
 			hp -= dmg;
 		}
@@ -71,6 +97,9 @@ namespace Battle.UnitCore {
 		}
 		public void Death() {
 			Debug.Log($"Died {name}");
+		}
+		public void HeelAp() {
+			ap += heelAp;
 		}
 
 		public void SetAction(int index) {

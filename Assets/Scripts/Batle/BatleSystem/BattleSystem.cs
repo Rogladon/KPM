@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Battle.UnitCore;
+using System.Linq;
 
 namespace Battle.System {
 	public class BattleSystem : MonoBehaviour {
@@ -16,6 +17,9 @@ namespace Battle.System {
 
 		private Unit currentUnit;
 
+		[SerializeField]
+		private List<Unit> AllUnits;
+
 		public void Init() {
 
 		}
@@ -25,6 +29,7 @@ namespace Battle.System {
 		//Test
 		void Start() {
 			StartCoroutine(Step());
+			AllUnits = FindObjectsOfType<Unit>().ToList();
 		}
 		//Test
 		Unit unitInfo;
@@ -44,6 +49,9 @@ namespace Battle.System {
 		IEnumerator Step() {
 			battleHUD.SetTeam(currentTeam);
 			Debug.Log($"Start step team {currentTeam}");
+
+			AllUnits.Where(p => p.team == currentTeam).ToList().
+				ForEach(p => p.OnStartStep());
 			yield return new WaitUntil(() => {
 				Unit unit = GetUnitMouse();
 				if (!unit) return false;
@@ -61,8 +69,11 @@ namespace Battle.System {
 		}
 		
 		public void EndStep() {
+			AllUnits.Where(p => p.team == currentTeam).ToList().
+				ForEach(p => p.OnEndStep());
 			currentTeam = currentTeam == countTeam ? 1 : currentTeam+1;
-			currentUnit.Disactive();
+			if(currentUnit)
+				currentUnit.Disactive();
 			battleHUD.ResetUnit();
 			StartCoroutine(Step());
 		}
