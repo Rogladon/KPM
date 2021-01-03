@@ -21,7 +21,7 @@ namespace Battle.UnitCore.Actions {
 			if (!position.HasValue) return;
 			NavMeshPath path = new NavMeshPath();
 			unit.agent.CalculatePath(position.Value, path);
-			int ap = GetAp(path.corners);
+			int ap = (int)(GetAp(path.corners)*price);
 			if (unit.ap - ap < 0) return;
 			unit.Action(ap);
 			Vector3 pos = position.Value;
@@ -53,7 +53,6 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public void OnEndStep() {
-			OnResetSelf();
 		}
 
 		public void OnResetSelf() {
@@ -87,7 +86,7 @@ namespace Battle.UnitCore.Actions {
 		void SetLine(Vector3[] pos) {
 			pos = pos.Select(p => new Vector3(p.x, cont.heightUI, p.z)).ToArray();
 			int lenght = GetAp(pos);
-			if(lenght > unit.ap) {
+			if((int)(lenght * price) > unit.ap) {
 				aim.GetComponent<MeshRenderer>().material.SetVector("_EmissionColor", notApColor * multiply);
 				line.material.SetVector("_EmissionColor", notApColor * multiply);
 			} else {

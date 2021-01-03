@@ -89,13 +89,14 @@ namespace Battle.System {
 			}
 			return null;
 		}
-		public static Unit GetUnitMouse() {
+		public static Unit GetUnitMouse(bool death = false) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {
 				Unit unit;
 				if (hit.transform.TryGetComponent(out unit)) {
-					return unit;
+					if(!(!death && unit.isDeath))
+						return unit;
 				}
 			}
 			return null;

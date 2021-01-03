@@ -17,6 +17,10 @@ namespace Battle.UnitCore {
 			}
 			private set {
 				_hp = value <= unitInfo.state.hp ? value : unitInfo.state.hp;
+				if(value <= 0) {
+					_hp = 0;
+					Death();
+				}
 			}
 		}
 		private int _hp;
@@ -35,7 +39,16 @@ namespace Battle.UnitCore {
 		private int defense;
 
 		private bool isLock => currentAction != null ?currentAction.isLock():false;
-		public bool isActive { get; private set; } = false;
+		public bool isActive {
+			get {
+				return _isActive && !isDeath;
+			}
+			set {
+				_isActive = value;
+			}
+		}
+		private bool _isActive;
+		public bool isDeath { get; private set; }
 
 		public IAction currentAction { get; set; }
 		public int team;
@@ -46,6 +59,11 @@ namespace Battle.UnitCore {
 			}
 			set {
 				transform.position = new Vector3(value.x, transform.position.y, value.z);
+			}
+		}
+		public float radius {
+			get {
+				return GetComponent<CapsuleCollider>().radius;
 			}
 		}
 		public NavMeshAgent agent { get; private set; }
@@ -72,12 +90,11 @@ namespace Battle.UnitCore {
 		public void Update() {
 			if (isLock) return;
 			if (!isActive) return;
-			currentAction.OnUpdate();
-			if (Input.GetMouseButtonDown(0)) {
-				currentAction.Action();
-			}
-			if (Input.GetMouseButtonDown(1)) {
-				SetAction(0);
+			if (currentAction != null) {
+				currentAction.OnUpdate();
+				if (Input.GetMouseButtonDown(0)) {
+					currentAction.Action();
+				}
 			}
 		}
 
@@ -86,6 +103,8 @@ namespace Battle.UnitCore {
 			actions.ForEach(p => p.OnStartStep());
 		}
 		public void OnEndStep() {
+			if(currentAction != null)
+				currentAction.OnResetSelf();
 			actions.ForEach(p => p.OnEndStep());
 		}
 
@@ -97,24 +116,31 @@ namespace Battle.UnitCore {
 		}
 		public void Death() {
 			Debug.Log($"Died {name}");
+			isDeath = true;
+			//TOODOO
+			agent.enabled = false;
+			transform.Rotate(new Vector3(90, 0, 0));
 		}
 		public void HeelAp() {
 			ap += heelAp;
 		}
 
 		public void SetAction(int index) {
+			if(currentAction != null)
+				currentAction.OnResetSelf();
 			currentAction = actions[index];
+			currentAction.OnChoiceSelf();
+		}
+		public void SetAction(IAction action) {
+			currentAction = action;
 			currentAction.OnChoiceSelf();
 		}
 		public void Activate() {
 			isActive = true;
-			actions.ForEach(p => p.OnStartStep());
-			SetAction(0);
+			currentAction = null;
 		}
 		public void Disactive() {
 			isActive = false;
-			actions.ForEach(p => p.OnEndStep());
-			currentAction.OnResetSelf();
 		}
 	}
 }

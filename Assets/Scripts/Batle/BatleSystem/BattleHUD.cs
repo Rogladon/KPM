@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using Battle.UnitCore;
-
+using UnityEngine.EventSystems;
 namespace Battle.System {
 	public class BattleHUD : MonoBehaviour {
 
@@ -22,7 +22,7 @@ namespace Battle.System {
 		[SerializeField]
 		PanelUnitInfo panelInfoUnit;
 		[SerializeField]
-		List<Button> actions = new List<Button>();
+		List<ActionIcon> actions = new List<ActionIcon>();
 
 		private Unit unit = null;
 		private RectTransform canvas;
@@ -36,11 +36,7 @@ namespace Battle.System {
 			unitPanel.SetActive(true);
 			for(int i = 0; i < unit.actions.Count; i++) {
 				if (unit.actions[i].isActive()) {
-					Action act = unit.actions[i] as Action;
-					actions[i].image.sprite = act.icon;
-					actions[i].onClick.AddListener(() => {
-						unit.SetAction(i);
-					});
+					actions[i].Init(unit, i);
 				}
 			}
 		}

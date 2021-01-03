@@ -9,7 +9,12 @@ namespace Battle {
 
 		public LineRenderer lineMove;
 		public GameObject aimMove;
+		public GameObject circleArea;
 		public float heightUI;
+
+		public Texture2D attackCursor;
+		public Texture2D defaultCursor;
+		public Texture2D noAttackCursor;
 
 		public void Awake() {
 			instance = this;

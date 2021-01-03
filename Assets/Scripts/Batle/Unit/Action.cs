@@ -5,7 +5,8 @@ namespace Battle.UnitCore {
 		public Sprite icon;
 		public string nameSkill;
 		public string description;
+		public float price;
 		protected Unit unit;
-
+		
 	}
 }
