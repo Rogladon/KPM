@@ -16,12 +16,12 @@ namespace Battle.UnitCore {
 		Color notApColor;
 		[SerializeField]
 		float multiply = 3f;
-		float lenght;
 		BattleStaticContainer cont => BattleStaticContainer.instance;
 		public void Action() {
 			if (!position.HasValue) return;
-
-			int ap = Mathf.RoundToInt(lenght);
+			NavMeshPath path = new NavMeshPath();
+			unit.agent.CalculatePath(position.Value, path);
+			int ap = GetAp(path.corners);
 			if (unit.ap - ap < 0) return;
 			unit.Action(ap);
 			Vector3 pos = position.Value;
@@ -76,23 +76,25 @@ namespace Battle.UnitCore {
 				SetLine(path.corners);
 			}
 		}
-		public string test;
+		int GetAp(Vector3[] pos) {
+			pos = pos.Select(p => new Vector3(p.x, 0, p.z)).ToArray();
+			float lenght = 0;
+			for(int i = 1; i < pos.Length; i++) {
+				lenght += Vector3.Distance(pos[i - 1], pos[i]);
+			}
+			return Mathf.RoundToInt(lenght);
+		}
 		void SetLine(Vector3[] pos) {
 			pos = pos.Select(p => new Vector3(p.x, cont.heightUI, p.z)).ToArray();
-			lenght = 0;
-			pos.Aggregate((x, y) => {
-				lenght += Vector3.Distance(x, y);
-				return x;
-			});
-			if(Mathf.Round(lenght) > unit.ap) {
-				//line.material.color = notApColor;
-				//line.material.GetTexturePropertyNames().All(p => { Debug.Log(p); return true; });
+			int lenght = GetAp(pos);
+			if(lenght > unit.ap) {
+				aim.GetComponent<MeshRenderer>().material.SetVector("_EmissionColor", notApColor * multiply);
 				line.material.SetVector("_EmissionColor", notApColor * multiply);
-				//line.material.SetColor(test, notApColor);
 			} else {
-				//line.material.color = defaultColor;
+				aim.GetComponent<MeshRenderer>().material.SetVector("_EmissionColor", defaultColor * multiply);
 				line.material.SetVector("_EmissionColor", defaultColor * multiply);
 			}
+			BattleSystem.SetApHud(lenght);
 			line.positionCount = pos.Length;
 			line.SetPositions(pos.Select(p => new Vector3(p.x, cont.heightUI, p.z)).ToArray());
 			aim.gameObject.SetActive(true);

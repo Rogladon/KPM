@@ -5,6 +5,7 @@ using Battle.UnitCore;
 
 namespace Battle.System {
 	public class BattleSystem : MonoBehaviour {
+		private static BattleSystem instnce;
 
 		[SerializeField]
 		BattleHUD battleHUD;
@@ -17,6 +18,9 @@ namespace Battle.System {
 
 		public void Init() {
 
+		}
+		private void Awake() {
+			instnce = this;
 		}
 		//Test
 		void Start() {
@@ -41,15 +45,19 @@ namespace Battle.System {
 			currentUnit.Activate();
 			battleHUD.SetUnit(currentUnit);
 		}
-
-		private bool ChoiceUnit() {
-			//Выбор юнита можно перенести в корутину
-			return true;
+		
+		public void EndStep() {
+			currentTeam = currentTeam == countTeam ? 1 : currentTeam+1;
+			currentUnit.Disactive();
+			battleHUD.ResetUnit();
+			StartCoroutine(Step());
 		}
+
+		#region Static
 		public static Vector3? ChoicePosition() {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
-			if(Physics.Raycast(ray, out hit)) {
+			if (Physics.Raycast(ray, out hit)) {
 				if (hit.transform.CompareTag("Terrain")) {
 					return hit.point;
 				}
@@ -67,11 +75,10 @@ namespace Battle.System {
 			}
 			return null;
 		}
-		public void EndStep() {
-			currentTeam = currentTeam == countTeam ? 1 : currentTeam+1;
-			currentUnit.Disactive();
-			battleHUD.ResetUnit();
-			StartCoroutine(Step());
+
+		public static void SetApHud(int ap) {
+			instnce.battleHUD.SetApHud(ap);
 		}
+		#endregion
 	}
 }

@@ -18,6 +18,8 @@ namespace Battle.System {
 		[SerializeField]
 		Text ap;
 		[SerializeField]
+		Text minusAp;
+		[SerializeField]
 		List<Button> actions = new List<Button>();
 
 		private Unit unit = null;
@@ -53,6 +55,9 @@ namespace Battle.System {
 
 		public void SetTeam(int team) {
 			currentTeam.text = team.ToString();
+		}
+		public void SetApHud(int ap) {
+			minusAp.text = $"-{ap}";
 		}
 	}
 }
