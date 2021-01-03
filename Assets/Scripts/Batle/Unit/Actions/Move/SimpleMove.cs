@@ -5,7 +5,7 @@ using Battle.System;
 using UnityEngine.AI;
 using System.Linq;
 
-namespace Battle.UnitCore {
+namespace Battle.UnitCore.Actions {
 	public class SimpleMove : Action, IAction {
 		Vector3? position = null;
 		LineRenderer line;
@@ -66,7 +66,7 @@ namespace Battle.UnitCore {
 		}
 
 		public void OnUpdate() {
-			position = BattleSystem.ChoicePosition();
+			position = BattleSystem.GetPositionMouse();
 			if (!position.HasValue) {
 				ResetLine();
 				return;

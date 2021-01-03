@@ -27,11 +27,25 @@ namespace Battle.System {
 			StartCoroutine(Step());
 		}
 		//Test
+		Unit unitInfo;
+		void Update() {
+			if (Input.GetMouseButtonDown(1)) {
+				unitInfo = GetUnitMouse();
+				if (unitInfo) {
+					battleHUD.GetInfoUnit(unitInfo, Camera.main.ScreenToViewportPoint(Input.mousePosition));
+				}
+			}
+			if (unitInfo) {
+				if (Input.GetMouseButtonUp(1)) {
+					battleHUD.ResetInfoUnit();
+				}
+			}
+		}
 		IEnumerator Step() {
 			battleHUD.SetTeam(currentTeam);
 			Debug.Log($"Start step team {currentTeam}");
 			yield return new WaitUntil(() => {
-				Unit unit = ChoiceTarget();
+				Unit unit = GetUnitMouse();
 				if (!unit) return false;
 				if (unit.team == currentTeam) {
 					if (Input.GetMouseButtonDown(0)) {
@@ -54,7 +68,7 @@ namespace Battle.System {
 		}
 
 		#region Static
-		public static Vector3? ChoicePosition() {
+		public static Vector3? GetPositionMouse() {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {
@@ -64,7 +78,7 @@ namespace Battle.System {
 			}
 			return null;
 		}
-		public static Unit ChoiceTarget() {
+		public static Unit GetUnitMouse() {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {

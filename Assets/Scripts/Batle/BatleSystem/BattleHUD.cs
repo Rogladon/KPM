@@ -20,9 +20,16 @@ namespace Battle.System {
 		[SerializeField]
 		Text minusAp;
 		[SerializeField]
+		PanelUnitInfo panelInfoUnit;
+		[SerializeField]
 		List<Button> actions = new List<Button>();
 
 		private Unit unit = null;
+		private RectTransform canvas;
+
+		private void Start() {
+			canvas = GetComponentInParent<Canvas>().GetComponent<RectTransform>();
+		}
 
 		public void SetUnit(Unit unit) {
 			this.unit = unit;
@@ -51,6 +58,15 @@ namespace Battle.System {
 			hp.text = unit.hp.ToString();
 			ap.text = unit.ap.ToString();
 
+		}
+		public void GetInfoUnit(Unit unit, Vector2 screenPosition) {
+			Vector2 pos = screenPosition;
+			pos.x *= canvas.sizeDelta.x;
+			pos.y *= canvas.sizeDelta.y;
+			panelInfoUnit.SetInfo(unit, pos);
+		}
+		public void ResetInfoUnit() {
+			panelInfoUnit.ResetInfo();
 		}
 
 		public void SetTeam(int team) {
