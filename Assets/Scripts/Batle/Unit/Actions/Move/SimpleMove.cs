@@ -32,7 +32,6 @@ namespace Battle.UnitCore.Actions {
 		}
 		private void SetAnim() {
 			unit.state.PlayUntil(StateMachine.State.skill1, () => {
-				Debug.Log(unit.agent.desiredVelocity == Vector3.zero);
 				return unit.agent.desiredVelocity == Vector3.zero;
 			});
 		}
@@ -91,7 +90,6 @@ namespace Battle.UnitCore.Actions {
 			return Mathf.RoundToInt(lenght);
 		}
 		void SetLine(Vector3[] pos) {
-			pos = pos.Select(p => new Vector3(p.x, cont.heightUI, p.z)).ToArray();
 			int lenght = GetAp(pos);
 			if((int)(lenght * price) > unit.ap) {
 				aim.GetComponent<MeshRenderer>().material.SetVector("_EmissionColor", notApColor * multiply);
@@ -102,7 +100,7 @@ namespace Battle.UnitCore.Actions {
 			}
 			BattleSystem.SetApHud(lenght);
 			line.positionCount = pos.Length;
-			line.SetPositions(pos.Select(p => new Vector3(p.x, cont.heightUI, p.z)).ToArray());
+			line.SetPositions(pos.Select(p => new Vector3(p.x, p.y+0.1f, p.z)).ToArray());
 			aim.gameObject.SetActive(true);
 			Vector3 posAim = pos[pos.Length - 1];
 			posAim.y = cont.heightUI;

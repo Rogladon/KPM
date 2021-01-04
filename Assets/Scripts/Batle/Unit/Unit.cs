@@ -6,6 +6,10 @@ using UnityEngine.AI;
 
 namespace Battle.UnitCore {
 	public class Unit : MonoBehaviour {
+		//TOODOO
+		[SerializeField]
+		GameObject hover;
+		//TOODOO
 		public UnitInfo unitInfo;
 
 		public List<IAction> actions { get; private set; }
@@ -145,5 +149,21 @@ namespace Battle.UnitCore {
 		public void Disactive() {
 			isActive = false;
 		}
+		//TOODOO
+		float time;
+		public void HoverOn() {
+			hover.SetActive(true);
+			time = 0.1f;
+		}
+		public void HoverOut() {
+			hover.SetActive(false);
+		}
+		private void LateUpdate() {
+			time -= Time.deltaTime;
+			if(time <= 0) {
+				HoverOut();
+			}
+		}
+		//TOODOO
 	}
 }

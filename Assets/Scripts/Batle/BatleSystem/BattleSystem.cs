@@ -5,6 +5,10 @@ using Battle.UnitCore;
 using System.Linq;
 
 namespace Battle.System {
+	public enum UnitFindFlag {
+		With,
+		Without
+	}
 	public class BattleSystem : MonoBehaviour {
 		private static BattleSystem instnce;
 
@@ -53,7 +57,7 @@ namespace Battle.System {
 			AllUnits.Where(p => p.team == currentTeam).ToList().
 				ForEach(p => p.OnStartStep());
 			yield return new WaitUntil(() => {
-				Unit unit = GetUnitMouse();
+				Unit unit = GetUnitMouse(currentTeam, UnitFindFlag.With);
 				if (!unit) return false;
 				if (unit.team == currentTeam) {
 					if (Input.GetMouseButtonDown(0)) {
@@ -100,6 +104,21 @@ namespace Battle.System {
 				}
 			}
 			return null;
+		}
+		public static Unit GetUnitMouse(int team, UnitFindFlag flag, bool death = false) {
+			Unit unit = GetUnitMouse(death);
+			if (unit == null) return null;
+			if(flag == UnitFindFlag.With) {
+				if (unit.team != team)
+					unit = null;
+			} 
+			if(flag == UnitFindFlag.Without) {
+				if (unit.team == team)
+					unit = null;
+			}
+			if (unit)
+				unit.HoverOn();
+			return unit;
 		}
 
 		public static void SetApHud(int ap) {

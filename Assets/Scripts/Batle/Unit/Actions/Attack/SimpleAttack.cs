@@ -22,6 +22,9 @@ namespace Battle.UnitCore.Actions {
 			//TOODOO
 			if(Vector3.Distance(target.position, unit.position) < maxDistance) {
 				target.Hit(damage);
+				Vector3 posLook = target.position;
+				posLook.y = unit.position.y;
+				unit.transform.LookAt(posLook);
 				unit.Action((int)price);
 				unit.state.PlaySinglton(StateMachine.State.skill2);
 			}
@@ -68,7 +71,7 @@ namespace Battle.UnitCore.Actions {
 		}
 		bool isCursorAttack;
 		public void OnUpdate() {
-			target = BattleSystem.GetUnitMouse();
+			target = BattleSystem.GetUnitMouse(unit.team, UnitFindFlag.Without);
 			if (target) {
 				AreaSetPosition();
 				if (Vector3.Distance(unit.position, target.position) < maxDistance) {

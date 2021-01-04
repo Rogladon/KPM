@@ -33,6 +33,7 @@ namespace Battle.UnitCore {
 		private void Start() {
 			anim = GetComponentInChildren<Animation>();
 			animations.ForEach(p => anim.AddClip(p.clips[0], p.clips[0].name));
+			ResetState();
 		}
 
 		private void SetState(State _state) {
