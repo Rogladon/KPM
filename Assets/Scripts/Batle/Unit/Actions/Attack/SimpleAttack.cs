@@ -23,6 +23,7 @@ namespace Battle.UnitCore.Actions {
 			if(Vector3.Distance(target.position, unit.position) < maxDistance) {
 				target.Hit(damage);
 				unit.Action((int)price);
+				unit.state.PlaySinglton(StateMachine.State.skill2);
 			}
 		}
 

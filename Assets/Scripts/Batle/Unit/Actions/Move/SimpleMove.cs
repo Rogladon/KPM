@@ -28,6 +28,13 @@ namespace Battle.UnitCore.Actions {
 			pos.y = unit.position.y;
 			unit.agent.destination = pos;
 			ResetLine();
+			Invoke("SetAnim", 0.1f);
+		}
+		private void SetAnim() {
+			unit.state.PlayUntil(StateMachine.State.skill1, () => {
+				Debug.Log(unit.agent.desiredVelocity == Vector3.zero);
+				return unit.agent.desiredVelocity == Vector3.zero;
+			});
 		}
 
 		public bool isActive() {

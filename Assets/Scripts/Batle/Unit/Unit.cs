@@ -67,6 +67,7 @@ namespace Battle.UnitCore {
 			}
 		}
 		public NavMeshAgent agent { get; private set; }
+		public StateMachine state { get; private set; }
 		//Test
 		private void Start() {
 			Init(team);
@@ -75,6 +76,7 @@ namespace Battle.UnitCore {
 
 		public void Init(int team) {
 			agent = GetComponent<NavMeshAgent>();
+			state = GetComponent<StateMachine>();
 			hp = unitInfo.state.hp;
 			ap = unitInfo.state.ap;
 			heelAp = unitInfo.state.heelAp;
@@ -105,6 +107,7 @@ namespace Battle.UnitCore {
 		public void OnEndStep() {
 			if(currentAction != null)
 				currentAction.OnResetSelf();
+			currentAction = null;
 			actions.ForEach(p => p.OnEndStep());
 		}
 
