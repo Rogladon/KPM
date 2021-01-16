@@ -7,6 +7,10 @@ namespace Battle.UnitCore {
 		public string description;
 		public float price;
 		protected Unit unit;
+
+		public string GetDescription() {
+			return description;
+		}
 		
 	}
 }

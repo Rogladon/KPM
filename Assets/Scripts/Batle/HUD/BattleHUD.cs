@@ -22,6 +22,8 @@ namespace Battle.System {
 		[SerializeField]
 		PanelUnitInfo panelInfoUnit;
 		[SerializeField]
+		PanelActionInfo panelActionInfo;
+		[SerializeField]
 		List<ActionIcon> actions = new List<ActionIcon>();
 
 		private Unit unit = null;
@@ -36,7 +38,7 @@ namespace Battle.System {
 			unitPanel.SetActive(true);
 			for(int i = 0; i < unit.actions.Count; i++) {
 				if (unit.actions[i].isActive()) {
-					actions[i].Init(unit, i);
+					actions[i].Init(unit, i, panelActionInfo);
 				}
 			}
 		}
