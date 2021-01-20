@@ -13,7 +13,7 @@ namespace Battle.UnitCore {
 		public UnitInfo unitInfo;
 
 		public List<IAction> actions { get; private set; }
-		//Buffs
+		public List<IBuff> buffs { get; private set; }
 
 		public int hp {
 			get {
@@ -89,11 +89,13 @@ namespace Battle.UnitCore {
 
 			actions = GetComponents<IAction>().ToList();
 			actions.ForEach(p => p.OnAwake(this));
+			buffs.ForEach(p => p.OnAwake(this));
 			SetAction(0);
 			this.team = team;
 		}
 
 		public void Update() {
+			buffs.ForEach(p => p.OnUpdate());
 			if (isLock) return;
 			if (!isActive) return;
 			if (currentAction != null) {
@@ -107,12 +109,14 @@ namespace Battle.UnitCore {
 		public void OnStartStep() {
 			HeelAp();
 			actions.ForEach(p => p.OnStartStep());
+			buffs.ForEach(p => p.OnStartStep());
 		}
 		public void OnEndStep() {
 			if(currentAction != null)
 				currentAction.OnResetSelf();
 			currentAction = null;
 			actions.ForEach(p => p.OnEndStep());
+			buffs.ForEach(p => p.OnEndStep());
 		}
 
 		public void Hit(int dmg) {
@@ -149,6 +153,16 @@ namespace Battle.UnitCore {
 		public void Disactive() {
 			isActive = false;
 		}
+
+		public void AddBuff(IBuff buff) {
+			buffs.Add(buff);
+			buff.OnAwake(this);
+		}
+		public void RemoveBuff(IBuff buff) {
+			buffs.Remove(buff);
+			buff.OnDestroy();
+		}
+		#region TOODOO
 		//TOODOO
 		float time;
 		public void HoverOn() {
@@ -165,5 +179,7 @@ namespace Battle.UnitCore {
 			}
 		}
 		//TOODOO
+		#endregion
+
 	}
 }
