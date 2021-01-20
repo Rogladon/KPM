@@ -5,6 +5,13 @@ using System.Linq;
 using UnityEngine.AI;
 
 namespace Battle.UnitCore {
+	public struct BattleUnitState {
+		public int strenght;
+		public int defense;
+		public int maxHp;
+		public int maxAp;
+		public int heelAp;
+	}
 	public class Unit : MonoBehaviour {
 		//TOODOO
 		[SerializeField]
@@ -20,7 +27,7 @@ namespace Battle.UnitCore {
 				return _hp;
 			}
 			private set {
-				_hp = value <= unitInfo.state.hp ? value : unitInfo.state.hp;
+				_hp = value <= unitState.maxHp ? value : unitState.maxHp;
 				if(value <= 0) {
 					_hp = 0;
 					Death();
@@ -33,14 +40,11 @@ namespace Battle.UnitCore {
 				return _ap;
 			}
 			private set {
-				_ap = value <= unitInfo.state.ap ? value : unitInfo.state.ap;
+				_ap = value <= unitState.maxAp ? value : unitState.maxAp;
 			}
 		}
 		private int _ap;
-		public int heelAp { get; private set; }
-
-		private int strenght;
-		private int defense;
+		public BattleUnitState unitState;
 
 		private bool isLock => currentAction != null ?currentAction.isLock():false;
 		public bool isActive {
@@ -83,9 +87,13 @@ namespace Battle.UnitCore {
 			state = GetComponent<StateMachine>();
 			hp = unitInfo.state.hp;
 			ap = unitInfo.state.ap;
-			heelAp = unitInfo.state.heelAp;
-			strenght = unitInfo.state.strenght;
-			defense = unitInfo.state.defense;
+			unitState = new BattleUnitState {
+				maxHp = unitInfo.state.hp,
+				maxAp = unitInfo.state.ap,
+				heelAp = unitInfo.state.heelAp,
+				strenght = unitInfo.state.strenght,
+				defense = unitInfo.state.defense
+			};
 
 			actions = GetComponents<IAction>().ToList();
 			actions.ForEach(p => p.OnAwake(this));
@@ -133,7 +141,7 @@ namespace Battle.UnitCore {
 			transform.Rotate(new Vector3(90, 0, 0));
 		}
 		public void HeelAp() {
-			ap += heelAp;
+			ap += unitState.heelAp;
 		}
 
 		public void SetAction(int index) {

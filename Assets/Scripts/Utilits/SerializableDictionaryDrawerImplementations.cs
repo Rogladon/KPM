@@ -16,6 +16,17 @@ public class StringAnimationsDictionaryDrawer : SerializableDictionaryDrawer<str
 }
 internal class StringAnimationsDictionaryTemplate : SerializableKeyValueTemplate<string, Battle.UnitCore.Animations> { }
 
+// ---------------
+//  State => int
+// ---------------
+[UnityEditor.CustomPropertyDrawer(typeof(StateIntDictionary))]
+public class StateIntDictionaryDrawer : SerializableDictionaryDrawer<Battle.UnitCore.Buffs.BuffState.State, int> {
+	protected override SerializableKeyValueTemplate<Battle.UnitCore.Buffs.BuffState.State, int> GetTemplate() {
+		return GetGenericTemplate<StateIntDictionaryTemplate>();
+	}
+}
+internal class StateIntDictionaryTemplate : SerializableKeyValueTemplate<Battle.UnitCore.Buffs.BuffState.State, int> { }
+
 
 
 #endif
