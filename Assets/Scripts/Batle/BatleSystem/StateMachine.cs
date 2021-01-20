@@ -19,9 +19,14 @@ namespace Battle.UnitCore {
 	}
 	public class StateMachine : MonoBehaviour {
 		public static string IDLE = "idle";
-		public static string ATTACK = "attck";
+		public static string ATTACK = "attack";
+		public static string DISTANCEATTCK = "distanceAttack";
+		public static string RUN = "run";
 
 		public delegate bool Condition(Unit unit);
+
+		public AnimationEvent animEvent { get; private set; }
+
 		[Header("Animations")]
 		[SerializeField]
 		StringAnimationsDictionary _animations = StringAnimationsDictionary.New<StringAnimationsDictionary>();
@@ -38,27 +43,38 @@ namespace Battle.UnitCore {
 
 		private void Start() {
 			anim = GetComponentInChildren<Animation>();
+			AnimationEvent ae;
+			anim.TryGetComponent(out ae);
+			animEvent = ae;
 			foreach(var p in animations) {
 				for(int i = 0; i< p.Value.clips.Count; i++) {
-					anim.AddClip(p.Value[i], $"{p.Key}-{i}");
+					//TOODOO
+					if(i != 0)
+						anim.AddClip(p.Value[i], $"{p.Key}-{i}");
+					else
+						anim.AddClip(p.Value[i], $"{p.Key}");
 				}
 			}
 			ResetState();
 		}
 		private void SetState(string _state) {
 			state = _state;
+			if(!animations.ContainsKey(_state)) {
+				Debug.Log($"Animations doesn`t has key: {_state}");
+				return;
+			}
 			Debug.Log($"Animtion: {state.ToString()} : {animations[state].clips[0].name}");
-			anim.Play(animations[state].clips[0].name);
+			anim.Play(state);
 		}
 		private void ResetState() {
 			state = IDLE;
-			anim.Play(animations[state].clips[0].name);
+			anim.Play(state);
 		}
 		public void PlaySinglton(string _state) {
 			SetState(_state);
 			StartCoroutine(_PlaySinglton());
 		}
-		public IEnumerable WaitPlaySinglton(string _state) {
+		public IEnumerator WaitPlaySinglton(string _state) {
 			SetState(_state);
 			yield return _PlaySinglton();
 		}
