@@ -31,7 +31,7 @@ namespace Battle.UnitCore.Actions {
 			Invoke("SetAnim", 0.1f);
 		}
 		private void SetAnim() {
-			unit.state.PlayUntil(StateMachine.State.skill1, () => {
+			unit.state.PlayUntil(StateMachine.RUN, () => {
 				return unit.agent.desiredVelocity == Vector3.zero;
 			});
 		}

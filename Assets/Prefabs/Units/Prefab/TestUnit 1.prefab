@@ -169,6 +169,7 @@ GameObject:
   - component: {fileID: 2422878706436007535}
   - component: {fileID: 5492077795663586510}
   - component: {fileID: 5492077795663586508}
+  - component: {fileID: 6993704993843494704}
   - component: {fileID: 5492077795663586509}
   - component: {fileID: 5492077795663586506}
   m_Layer: 0
@@ -309,6 +310,25 @@ MonoBehaviour:
   price: 5
   _maxDistance: 1
   damage: 2
+--- !u!114 &6993704993843494704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5795825852885335138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9daa3f0bef7c3db4c874a35873f1d34f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  icon: {fileID: 0}
+  nameSkill: 
+  description: 
+  price: 0
+  _maxDistance: 0
+  damage: 0
+  arrow: {fileID: 0}
 --- !u!114 &5492077795663586509
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -321,14 +341,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f60782f6d35b22489574563ce8f799b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animations:
-  - clips:
-    - {fileID: -1386184631752016681, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
-  - clips:
-    - {fileID: 6815872723682837606, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
-  - clips:
-    - {fileID: 1986273104631883609, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
-  state: 0
+  _animations:
+    keys:
+    - idle
+    - run
+    - attack
+    - distanceAttack
+    values:
+    - clips:
+      - {fileID: -1386184631752016681, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
+    - clips:
+      - {fileID: 6815872723682837606, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
+    - clips:
+      - {fileID: 1986273104631883609, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
+    - clips:
+      - {fileID: 1986273104631883609, guid: cc0b0c359c99e2c44b35977d6bcc15f0, type: 3}
 --- !u!195 &5492077795663586506
 NavMeshAgent:
   m_ObjectHideFlags: 0

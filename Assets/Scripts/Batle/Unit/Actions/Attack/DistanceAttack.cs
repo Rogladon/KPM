@@ -1,14 +1,18 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Battle.System;
 
 namespace Battle.UnitCore.Actions {
-	public class SimpleAttack : Action, IAction {
+	class DistanceAttack : Action, IAction{
 		[SerializeField]
 		float _maxDistance;
 		[SerializeField]
 		int damage;
+		[SerializeField]
+		Arrow arrow;
 
 		Transform area;
 
@@ -16,18 +20,35 @@ namespace Battle.UnitCore.Actions {
 
 		Unit target;
 		BattleStaticContainer cont => BattleStaticContainer.instance;
+
+		bool _isLock = false;
 		public void Action() {
 			if (!target) return;
 			if (price > unit.ap) return;
 			//TOODOO
-			if(Vector3.Distance(target.position, unit.position) < maxDistance) {
-				target.Hit(damage);
-				Vector3 posLook = target.position;
-				posLook.y = unit.position.y;
-				unit.transform.LookAt(posLook);
+			if (Vector3.Distance(target.position, unit.position) < maxDistance) {
+				unit.transform.LookAt(target.position);
+				StartCoroutine(Attack(target));
 				unit.Action((int)price);
-				unit.state.PlaySinglton(StateMachine.ATTACK);
 			}
+		}
+
+		private IEnumerator Attack(Unit target) {
+			_isLock = true;
+			yield return unit.state.WaitPlaySinglton(StateMachine.DISTANCEATTCK);
+			Debug.Log("Distance Attack animation complete");
+			if (a == null) {
+				a = arrow.Create(unit.position, target.position);
+				
+			}
+			yield return a.WaitTargetHit();
+			target.Hit(damage);
+			a = null;
+			_isLock = false;
+		}
+		private Arrow a = null;
+		private void CreateArrow() {
+			a = arrow.Create(unit.position, target.position);
 		}
 
 		public bool isActive() {
@@ -35,11 +56,12 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public bool isLock() {
-			return false;
+			return _isLock;
 		}
 
 		public void OnAwake(Unit unit) {
 			this.unit = unit;
+			
 		}
 
 		public void OnChoiceSelf() {
@@ -47,6 +69,7 @@ namespace Battle.UnitCore.Actions {
 			area = Instantiate(cont.circleArea).transform;
 			AreaSetPosition();
 			area.localScale = Vector3.one * maxDistance;
+			unit.state.animEvent.AddFunc("shoot", CreateArrow);
 		}
 		void AreaSetPosition() {
 			Vector3 pos = unit.position;
@@ -55,7 +78,7 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public void OnDestroy() {
-			
+
 		}
 
 		public void OnEndStep() {
@@ -67,7 +90,7 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public void OnStartStep() {
-			
+
 		}
 		bool isCursorAttack;
 		public void OnUpdate() {

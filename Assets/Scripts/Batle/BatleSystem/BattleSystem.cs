@@ -124,6 +124,10 @@ namespace Battle.System {
 		public static void SetApHud(int ap) {
 			instnce.battleHUD.SetApHud(ap);
 		}
+
+		public static GameObject Instantiate(GameObject prefab) {
+			return Object.Instantiate(prefab);
+		}
 		#endregion
 	}
 }
