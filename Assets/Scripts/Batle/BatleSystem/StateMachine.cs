@@ -49,9 +49,17 @@ namespace Battle.UnitCore {
 			SetState(_state);
 			StartCoroutine(_PlaySinglton());
 		}
+		public IEnumerable WaitPlaySinglton(State _state) {
+			SetState(_state);
+			yield return _PlaySinglton();
+		}
 		public void PlayUntil(State _state, Func<bool> predicate) {
 			SetState(_state);
 			FinishOnCondition(predicate);
+		}
+		public IEnumerator WaitPlayUntil(State _state, Func<bool> predicate) {
+			SetState(_state);
+			yield return _FinishOnCondition(predicate);
 		}
 		public void FinishOnCondition(Func<bool> predicate) {
 			StartCoroutine(_FinishOnCondition(predicate));
