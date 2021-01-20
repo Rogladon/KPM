@@ -6,15 +6,15 @@ using UnityEditor;
 #if UNITY_EDITOR
 
 // ---------------
-//  string => Animations
+//  string => Animationss
 // ---------------
-[UnityEditor.CustomPropertyDrawer(typeof(StringAnimationDictionary))]
-public class StringAnimationDictionaryDrawer : SerializableDictionaryDrawer<string, Animation> {
-	protected override SerializableKeyValueTemplate<string, Animation> GetTemplate() {
-		return GetGenericTemplate<StringAnimationDictionaryTemplate>();
+[UnityEditor.CustomPropertyDrawer(typeof(StringAnimationsDictionary))]
+public class StringAnimationsDictionaryDrawer : SerializableDictionaryDrawer<string, Battle.UnitCore.Animations> {
+	protected override SerializableKeyValueTemplate<string, Battle.UnitCore.Animations> GetTemplate() {
+		return GetGenericTemplate<StringAnimationsDictionaryTemplate>();
 	}
 }
-internal class StringAnimationDictionaryTemplate : SerializableKeyValueTemplate<string, Animation> { }
+internal class StringAnimationsDictionaryTemplate : SerializableKeyValueTemplate<string, Battle.UnitCore.Animations> { }
 
 
 

@@ -7,57 +7,66 @@ using System.Linq;
 
 namespace Battle.UnitCore {
 	[Serializable]
-	public struct Animations {
+	public class Animations {
 		public List<AnimationClip> clips;
 		public bool isSinglton => clips.Count == 1;
+
+		public AnimationClip this[int index] {
+			get {
+				return clips[index];
+			}
+		}
 	}
 	public class StateMachine : MonoBehaviour {
+		public static string IDLE = "idle";
+		public static string ATTACK = "attck";
+
 		public delegate bool Condition(Unit unit);
 		[Header("Animations")]
 		[SerializeField]
-		List<Animations> animations = new List<Animations>();
+		StringAnimationsDictionary _animations = StringAnimationsDictionary.New<StringAnimationsDictionary>();
 
-		public enum State {
-			idle,
-			skill1,
-			skill2,
-			skill3,
-			skill4,
-			skill5,
-			skill6
+		Dictionary<string, Animations> animations {
+			get {
+				return _animations.dictionary;
+			}
 		}
-		public State state;
 
 		private Animation anim;
 
+		private string state;
+
 		private void Start() {
 			anim = GetComponentInChildren<Animation>();
-			animations.ForEach(p => anim.AddClip(p.clips[0], p.clips[0].name));
+			foreach(var p in animations) {
+				for(int i = 0; i< p.Value.clips.Count; i++) {
+					anim.AddClip(p.Value[i], $"{p.Key}-{i}");
+				}
+			}
 			ResetState();
 		}
-
-		private void SetState(State _state) {
+		private void SetState(string _state) {
 			state = _state;
-			Debug.Log($"Animtion: {state.ToString()} : {(int)state} : {animations[(int)state].clips[0].name}");
-			anim.Play(animations[(int)state].clips[0].name);
+			Debug.Log($"Animtion: {state.ToString()} : {animations[state].clips[0].name}");
+			anim.Play(animations[state].clips[0].name);
 		}
 		private void ResetState() {
-			state = State.idle;
-			anim.Play(animations[0].clips[0].name);
+			state = IDLE;
+			anim.Play(animations[state].clips[0].name);
 		}
-		public void PlaySinglton(State _state) {
+		public void PlaySinglton(string _state) {
 			SetState(_state);
 			StartCoroutine(_PlaySinglton());
 		}
-		public IEnumerable WaitPlaySinglton(State _state) {
+		public IEnumerable WaitPlaySinglton(string _state) {
 			SetState(_state);
 			yield return _PlaySinglton();
 		}
-		public void PlayUntil(State _state, Func<bool> predicate) {
+		public void PlayUntil(string _state, Func<bool> predicate) {
 			SetState(_state);
 			FinishOnCondition(predicate);
 		}
-		public IEnumerator WaitPlayUntil(State _state, Func<bool> predicate) {
+		public IEnumerator WaitPlayUntil(string _state, Func<bool> predicate) {
 			SetState(_state);
 			yield return _FinishOnCondition(predicate);
 		}

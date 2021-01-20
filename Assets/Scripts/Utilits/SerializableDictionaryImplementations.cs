@@ -8,4 +8,4 @@ using UnityEngine;
 //  string => Animation
 // ---------------
 [Serializable]
-public class StringAnimationDictionary : SerializableDictionary<string, Animation> { }
+public class StringAnimationsDictionary : SerializableDictionary<string, Battle.UnitCore.Animations> { }
