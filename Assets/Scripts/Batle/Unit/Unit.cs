@@ -17,18 +17,18 @@ namespace Battle.UnitCore {
 		[SerializeField]
 		GameObject hover;
 		//TOODOO
+		#region UnitProperty
+		public int team;
 		public UnitInfo unitInfo;
-
-		public List<IAction> actions { get; private set; }
-		public List<IBuff> buffs { get; private set; } = new List<IBuff>();
-
+		[HideInInspector]
+		public BattleUnitState unitState;
 		public int hp {
 			get {
 				return _hp;
 			}
 			private set {
 				_hp = value <= unitState.maxHp ? value : unitState.maxHp;
-				if(value <= 0) {
+				if (value <= 0) {
 					_hp = 0;
 					Death();
 				}
@@ -44,9 +44,12 @@ namespace Battle.UnitCore {
 			}
 		}
 		private int _ap;
-		public BattleUnitState unitState;
 
-		private bool isLock => currentAction != null ?currentAction.isLock():false;
+
+		#endregion
+
+		#region Flags
+		private bool isLock => currentAction != null ? currentAction.isLock() : false;
 		public bool isActive {
 			get {
 				return _isActive && !isDeath;
@@ -57,10 +60,20 @@ namespace Battle.UnitCore {
 		}
 		private bool _isActive;
 		public bool isDeath { get; private set; }
+		#endregion
 
+		#region ActionBuff
+		public List<IAction> actions { get; private set; }
+		public List<IBuff> buffs { get; private set; } = new List<IBuff>();
 		public IAction currentAction { get; set; }
-		public int team;
+		#endregion
 
+		#region Components
+		public NavMeshAgent agent { get; private set; }
+		public StateMachine state { get; private set; }
+		#endregion
+
+		#region ObjectProperty
 		public Vector3 position {
 			get {
 				return transform.position;
@@ -74,8 +87,9 @@ namespace Battle.UnitCore {
 				return GetComponent<CapsuleCollider>().radius;
 			}
 		}
-		public NavMeshAgent agent { get; private set; }
-		public StateMachine state { get; private set; }
+		#endregion
+
+
 		//Test
 		private void Start() {
 			Init(team);
@@ -114,6 +128,7 @@ namespace Battle.UnitCore {
 			}
 		}
 
+		#region BattleLogic
 		public void OnStartStep() {
 			HeelAp();
 			actions.ForEach(p => p.OnStartStep());
@@ -126,7 +141,26 @@ namespace Battle.UnitCore {
 			actions.ForEach(p => p.OnEndStep());
 			buffs.ForEach(p => p.OnEndStep());
 		}
+		public void SetAction(int index) {
+			if (currentAction != null)
+				currentAction.OnResetSelf();
+			currentAction = actions[index];
+			currentAction.OnChoiceSelf();
+		}
+		public void SetAction(IAction action) {
+			currentAction = action;
+			currentAction.OnChoiceSelf();
+		}
+		public void Activate() {
+			isActive = true;
+			currentAction = null;
+		}
+		public void Disactive() {
+			isActive = false;
+		}
+		#endregion
 
+		#region UnitLogic
 		public void Hit(int dmg) {
 			hp -= dmg;
 		}
@@ -143,25 +177,6 @@ namespace Battle.UnitCore {
 		public void HeelAp() {
 			ap += unitState.heelAp;
 		}
-
-		public void SetAction(int index) {
-			if(currentAction != null)
-				currentAction.OnResetSelf();
-			currentAction = actions[index];
-			currentAction.OnChoiceSelf();
-		}
-		public void SetAction(IAction action) {
-			currentAction = action;
-			currentAction.OnChoiceSelf();
-		}
-		public void Activate() {
-			isActive = true;
-			currentAction = null;
-		}
-		public void Disactive() {
-			isActive = false;
-		}
-
 		public void AddBuff(IBuff buff) {
 			buffs.Add(buff);
 			buff.OnAwake(this);
@@ -170,6 +185,7 @@ namespace Battle.UnitCore {
 			buffs.Remove(buff);
 			buff.OnDestroy();
 		}
+		#endregion
 		#region TOODOO
 		//TOODOO
 		float time;
