@@ -40,6 +40,7 @@ namespace Battle.UnitCore {
 		private Animation anim;
 
 		private string state;
+		private string defaultState = IDLE;
 
 		private void Start() {
 			anim = GetComponentInChildren<Animation>();
@@ -66,8 +67,12 @@ namespace Battle.UnitCore {
 			Debug.Log($"Animtion: {state.ToString()} : {animations[state].clips[0].name}");
 			anim.Play(state);
 		}
+		public void SetDefaultState(string _state) {
+			defaultState = _state;
+			ResetState();
+		}
 		private void ResetState() {
-			state = IDLE;
+			state = defaultState;
 			anim.Play(state);
 		}
 		public void PlaySinglton(string _state) {

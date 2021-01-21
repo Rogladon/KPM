@@ -13,7 +13,8 @@ namespace Battle.UnitCore.Buffs {
 		}
 		[SerializeField]
 		StateIntDictionary _dictionary = StateIntDictionary.New<StateIntDictionary>();
-
+		[SerializeField]
+		string nameAnimation;
 		Dictionary<State, int> dictionary {
 			get {
 				return _dictionary.dictionary;
@@ -25,6 +26,7 @@ namespace Battle.UnitCore.Buffs {
 
 		public void OnAwake(Unit unit) {
 			this.unit = unit;
+			unit.state.SetDefaultState(nameAnimation);
 			foreach(var i in dictionary) {
 				switch (i.Key) {
 					case State.strenght: 
@@ -47,6 +49,7 @@ namespace Battle.UnitCore.Buffs {
 		}
 
 		public void OnDestroy() {
+			unit.state.SetDefaultState(StateMachine.IDLE);
 			foreach (var i in dictionary) {
 				switch (i.Key) {
 					case State.strenght:
