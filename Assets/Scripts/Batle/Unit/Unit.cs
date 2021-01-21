@@ -20,7 +20,7 @@ namespace Battle.UnitCore {
 		public UnitInfo unitInfo;
 
 		public List<IAction> actions { get; private set; }
-		public List<IBuff> buffs { get; private set; }
+		public List<IBuff> buffs { get; private set; } = new List<IBuff>();
 
 		public int hp {
 			get {
@@ -85,8 +85,7 @@ namespace Battle.UnitCore {
 		public void Init(int team) {
 			agent = GetComponent<NavMeshAgent>();
 			state = GetComponent<StateMachine>();
-			hp = unitInfo.state.hp;
-			ap = unitInfo.state.ap;
+			
 			unitState = new BattleUnitState {
 				maxHp = unitInfo.state.hp,
 				maxAp = unitInfo.state.ap,
@@ -94,7 +93,8 @@ namespace Battle.UnitCore {
 				strenght = unitInfo.state.strenght,
 				defense = unitInfo.state.defense
 			};
-
+			hp = unitInfo.state.hp;
+			ap = unitInfo.state.ap;
 			actions = GetComponents<IAction>().ToList();
 			actions.ForEach(p => p.OnAwake(this));
 			buffs.ForEach(p => p.OnAwake(this));
