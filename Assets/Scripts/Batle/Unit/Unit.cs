@@ -190,6 +190,10 @@ namespace Battle.UnitCore {
 			buffs.Add(buff);
 			buff.OnAwake(this);
 		}
+		public void AddBuff(List<IBuff> buff) {
+			buffs.AddRange(buff);
+			buff.ForEach(p => p.OnAwake(this));
+		}
 		public void RemoveBuff(IBuff buff) {
 			buffs.Remove(buff);
 			buff.OnDestroy();
