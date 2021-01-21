@@ -6,6 +6,8 @@ namespace Battle.UnitCore {
 		public string nameSkill;
 		public string description;
 		public float price;
+		[SerializeField]
+		protected string nameAnimation;
 		protected Unit unit;
 
 		public string GetDescription() {

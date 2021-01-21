@@ -7,12 +7,20 @@ using Battle.System;
 namespace Battle.UnitCore.Actions {
 	public class BuffAction : Action, IAction {
 		private Unit target;
+		bool _isLock = false;
 		public void Action() {
 			if (target) {
-				var buffs = GetComponentsInChildren<IBuff>();
-				unit.AddBuff(buffs.ToList());
-				unit.Action((int)price);
+				StartCoroutine(Buff());
 			}
+		}
+
+		protected IEnumerator Buff() {
+			_isLock = true;
+			yield return unit.state.WaitPlaySinglton(nameAnimation);
+			var buffs = GetComponentsInChildren<IBuff>();
+			unit.AddBuff(buffs.ToList());
+			unit.Action((int)price);
+			_isLock = false;
 		}
 
 		public bool isActive() {
@@ -20,7 +28,7 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public bool isLock() {
-			return false;
+			return _isLock;
 		}
 
 		public void OnAwake(Unit unit) {

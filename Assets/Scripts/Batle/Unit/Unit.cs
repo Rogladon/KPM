@@ -171,7 +171,7 @@ namespace Battle.UnitCore {
 
 		#region UnitLogic
 		public void Hit(int dmg) {
-			hp -= (int)(dmg*((float)unitState.defense/100f));
+			hp -= dmg - (int)(dmg*((float)unitState.defense/100f));
 		}
 		public void Action(int ap) {
 			this.ap -= ap;

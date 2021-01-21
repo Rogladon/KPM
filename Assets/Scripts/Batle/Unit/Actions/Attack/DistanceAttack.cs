@@ -10,15 +10,16 @@ namespace Battle.UnitCore.Actions {
 		[SerializeField]
 		float _maxDistance;
 		[SerializeField]
-		int damage;
+		float _damage;
 		[SerializeField]
 		Arrow arrow;
 
 		Transform area;
 
-		float maxDistance => _maxDistance + unit.radius;
+		protected float maxDistance => _maxDistance + unit.radius;
+		protected int damage => (int)(_damage * unit.unitState.strenght);
 
-		Unit target;
+		protected Unit target;
 		BattleStaticContainer cont => BattleStaticContainer.instance;
 
 		bool _isLock = false;
@@ -35,14 +36,14 @@ namespace Battle.UnitCore.Actions {
 
 		private IEnumerator Attack(Unit target) {
 			_isLock = true;
-			yield return unit.state.WaitPlaySinglton(StateMachine.DISTANCEATTCK);
+			yield return unit.state.WaitPlaySinglton(nameAnimation);
 			Debug.Log("Distance Attack animation complete");
 			if (a == null) {
 				a = arrow.Create(unit.position, target.position);
 				
 			}
 			yield return a.WaitTargetHit();
-			target.Hit(damage*unit.unitState.strenght);
+			target.Hit(damage);
 			a = null;
 			_isLock = false;
 		}

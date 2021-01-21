@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8343915843753914544
+--- !u!1 &6089322809510051269
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5879667410636233065}
-  - component: {fileID: -7798147872795066771}
+  - component: {fileID: 8562138727216501788}
+  - component: {fileID: 4973495216817613568}
   m_Layer: 0
-  m_Name: SimpleAttack
+  m_Name: DistanceAttack 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5879667410636233065
+--- !u!4 &8562138727216501788
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8343915843753914544}
+  m_GameObject: {fileID: 6089322809510051269}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -31,21 +31,21 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-7798147872795066771
+--- !u!114 &4973495216817613568
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8343915843753914544}
+  m_GameObject: {fileID: 6089322809510051269}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 831cfd78a12442e44bbbf7975c2ad5ae, type: 3}
+  m_Script: {fileID: 11500000, guid: de7f6b17528dbdf46be88f348d790af5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  icon: {fileID: 21300000, guid: b2a5ce1c5a56cdb45a56fdc8400d93b8, type: 3}
-  nameSkill: Attack
-  description: a
-  price: 5
-  _maxDistance: 1
+  icon: {fileID: 0}
+  nameSkill: 
+  description: 
+  price: 0
+  _maxDistance: 0
   _damage: 1

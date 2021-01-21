@@ -6,27 +6,28 @@ using Battle.System;
 namespace Battle.UnitCore.Actions {
 	public class SimpleAttack : Action, IAction {
 		[SerializeField]
-		float _maxDistance;
+		protected float _maxDistance;
 		[SerializeField]
-		int damage;
+		protected float _damage;
 
 		Transform area;
 
-		float maxDistance => _maxDistance + unit.radius;
+		protected float maxDistance => _maxDistance + unit.radius;
+		protected int damage => (int)(_damage * unit.unitState.strenght);
 
-		Unit target;
+		protected Unit target;
 		BattleStaticContainer cont => BattleStaticContainer.instance;
 		public void Action() {
 			if (!target) return;
 			if (price > unit.ap) return;
 			//TOODOO
 			if(Vector3.Distance(target.position, unit.position) < maxDistance) {
-				target.Hit(damage*unit.unitState.strenght);
+				target.Hit(damage);
 				Vector3 posLook = target.position;
 				posLook.y = unit.position.y;
 				unit.transform.LookAt(posLook);
 				unit.Action((int)price);
-				unit.state.PlaySinglton(StateMachine.ATTACK);
+				unit.state.PlaySinglton(nameAnimation);
 			}
 		}
 

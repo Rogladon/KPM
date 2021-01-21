@@ -45,6 +45,7 @@ namespace Battle.System {
 		public void ResetUnit() {
 			unit = null;
 			unitPanel.SetActive(false);
+			actions.ForEach(p => p.Reset());
 		}
 
 		void Update() {

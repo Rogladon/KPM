@@ -23,6 +23,12 @@ namespace Battle.System {
 			this.unit = unit;
 			GetComponent<Button>().onClick.AddListener(() => SetAction());
 		}
+		public void Reset() {
+			action = null;
+			GetComponent<Image>().sprite = null;
+			this.index = -1;
+			this.unit = null;
+		}
 
 		void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData) {
 			if(action)
@@ -37,6 +43,7 @@ namespace Battle.System {
 		void SetAction() {
 			unit.SetAction(index);
 		}
+
 
 	}
 }

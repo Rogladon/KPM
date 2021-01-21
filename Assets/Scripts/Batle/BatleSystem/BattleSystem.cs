@@ -73,6 +73,7 @@ namespace Battle.System {
 			yield return new WaitUntil(() => {
 				if (Input.GetKeyDown(KeyCode.Escape)) {
 					currentUnit.Disactive();
+					battleHUD.ResetUnit();
 					StopCoroutine(Step());
 					StartCoroutine(Step());
 				}
