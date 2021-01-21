@@ -95,7 +95,7 @@ namespace Battle.UnitCore {
 			};
 			hp = unitInfo.state.hp;
 			ap = unitInfo.state.ap;
-			actions = GetComponents<IAction>().ToList();
+			actions = GetComponentsInChildren<IAction>().ToList();
 			actions.ForEach(p => p.OnAwake(this));
 			buffs.ForEach(p => p.OnAwake(this));
 			SetAction(0);
