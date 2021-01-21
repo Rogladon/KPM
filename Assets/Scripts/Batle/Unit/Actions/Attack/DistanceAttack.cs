@@ -42,7 +42,7 @@ namespace Battle.UnitCore.Actions {
 				
 			}
 			yield return a.WaitTargetHit();
-			target.Hit(damage);
+			target.Hit(damage*unit.unitState.strenght);
 			a = null;
 			_isLock = false;
 		}

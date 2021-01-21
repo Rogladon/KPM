@@ -21,7 +21,7 @@ namespace Battle.UnitCore.Actions {
 			if (price > unit.ap) return;
 			//TOODOO
 			if(Vector3.Distance(target.position, unit.position) < maxDistance) {
-				target.Hit(damage);
+				target.Hit(damage*unit.unitState.strenght);
 				Vector3 posLook = target.position;
 				posLook.y = unit.position.y;
 				unit.transform.LookAt(posLook);
