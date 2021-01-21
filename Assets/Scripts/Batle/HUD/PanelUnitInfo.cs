@@ -11,6 +11,12 @@ namespace Battle.System {
 		[SerializeField]
 		Text ap;
 		[SerializeField]
+		Text strenght;
+		[SerializeField]
+		Text defense;
+		[SerializeField]
+		Text heelHp;
+		[SerializeField]
 		Text nameUnit;
 
 		RectTransform rect => GetComponent<RectTransform>();
@@ -20,8 +26,11 @@ namespace Battle.System {
 			gameObject.SetActive(true);
 			rect.anchoredPosition = pos+rect.sizeDelta;
 			textTeam.text = $"Team: {unit.team}";
-			hp.text = $"HP: {unit.hp}";
-			ap.text = $"AP: {unit.ap}";
+			hp.text = $"HP: {unit.hp}/{unit.unitState.maxHp}";
+			ap.text = $"AP: {unit.ap}/{unit.unitState.maxAp}";
+			strenght.text = $"Сила: {unit.unitState.strenght}";
+			defense.text = $"Защита: {unit.unitState.defense}";
+			heelHp.text = $"Восстановление AP: {unit.unitState.heelAp}";
 			nameUnit.text = unit.unitInfo.nameUnit;
 		}
 		public void ResetInfo() {
