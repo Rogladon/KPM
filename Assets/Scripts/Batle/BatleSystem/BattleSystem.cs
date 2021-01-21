@@ -70,6 +70,14 @@ namespace Battle.System {
 			});
 			currentUnit.Activate();
 			battleHUD.SetUnit(currentUnit);
+			yield return new WaitUntil(() => {
+				if (Input.GetKeyDown(KeyCode.Escape)) {
+					currentUnit.Disactive();
+					StopCoroutine(Step());
+					StartCoroutine(Step());
+				}
+				return currentUnit.isActionStep;
+			});
 		}
 		
 		public void EndStep() {

@@ -60,6 +60,7 @@ namespace Battle.UnitCore {
 		}
 		private bool _isActive;
 		public bool isDeath { get; private set; }
+		public bool isActionStep { get; private set; }
 		#endregion
 
 		#region ActionBuff
@@ -123,12 +124,16 @@ namespace Battle.UnitCore {
 			if (currentAction != null) {
 				currentAction.OnUpdate();
 				if (Input.GetMouseButtonDown(0)) {
+					isActionStep = true;
 					currentAction.Action();
 				}
 			}
 		}
 
 		#region BattleLogic
+		public void ResetAllAction() {
+			actions.ForEach(p => p.OnResetSelf());
+		}
 		public void OnStartStep() {
 			HeelAp();
 			actions.ForEach(p => p.OnStartStep());
@@ -140,6 +145,7 @@ namespace Battle.UnitCore {
 			currentAction = null;
 			actions.ForEach(p => p.OnEndStep());
 			buffs.ForEach(p => p.OnEndStep());
+			isActionStep = false;
 		}
 		public void SetAction(int index) {
 			if (currentAction != null)
@@ -157,6 +163,9 @@ namespace Battle.UnitCore {
 		}
 		public void Disactive() {
 			isActive = false;
+			if (currentAction != null)
+				currentAction.OnResetSelf();
+			currentAction = null;
 		}
 		#endregion
 
