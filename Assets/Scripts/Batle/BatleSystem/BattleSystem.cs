@@ -92,15 +92,25 @@ namespace Battle.System {
 		}
 
 		#region Static
-		public static Vector3? GetPositionMouse() {
+		public static Vector3? GetPositionMouse(bool isTerraion = true) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 			RaycastHit hit;
 			if (Physics.Raycast(ray, out hit)) {
-				if (hit.transform.CompareTag("Terrain")) {
+				if (hit.transform.CompareTag("Terrain") || !isTerraion) {
 					return hit.point;
 				}
 			}
 			return null;
+		}
+		public static bool IsTerrain(Vector3 position) {
+			position.y = 1000;
+			RaycastHit hit;
+			if(Physics.Raycast(position, Vector3.down, out hit)) {
+				if (hit.transform.CompareTag("Terrain")) {
+					return true;
+				}
+			}
+			return false;
 		}
 		public static Unit GetUnitMouse(bool death = false) {
 			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);

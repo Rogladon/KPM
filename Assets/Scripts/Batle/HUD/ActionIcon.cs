@@ -26,7 +26,7 @@ namespace Battle.System {
 		public void Reset() {
 			action = null;
 			GetComponent<Image>().sprite = null;
-			this.index = -1;
+			//this.index = -1;
 			this.unit = null;
 		}
 

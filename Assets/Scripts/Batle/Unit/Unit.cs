@@ -80,7 +80,7 @@ namespace Battle.UnitCore {
 				return transform.position;
 			}
 			set {
-				transform.position = new Vector3(value.x, transform.position.y, value.z);
+				transform.position = new Vector3(value.x, value.y, value.z);
 			}
 		}
 		public float radius {
@@ -112,6 +112,7 @@ namespace Battle.UnitCore {
 			ap = unitInfo.state.ap;
 			actions = GetComponentsInChildren<IAction>().ToList();
 			actions.ForEach(p => p.OnAwake(this));
+			actions.ForEach(p => Debug.Log(((Action)p).name));
 			buffs.ForEach(p => p.OnAwake(this));
 			SetAction(0);
 			this.team = team;

@@ -47,7 +47,7 @@ namespace Battle.UnitCore.Actions {
 			BattleSystem.SetApHud((int)price);
 			area = Instantiate(cont.circleArea).transform;
 			AreaSetPosition();
-			area.localScale = Vector3.one * maxDistance;
+			area.localScale = Vector3.one * maxDistance*2;
 		}
 		void AreaSetPosition() {
 			Vector3 pos = unit.position;

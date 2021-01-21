@@ -24,7 +24,7 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public bool isActive() {
-			return false;
+			return true;
 		}
 
 		public bool isLock() {

@@ -49,7 +49,7 @@ namespace Battle.UnitCore.Actions {
 		}
 		private Arrow a = null;
 		private void CreateArrow() {
-			a = arrow.Create(unit.position, target.position);
+			a = arrow.Create(unit.position+Vector3.up, target.position);
 		}
 
 		public bool isActive() {
@@ -69,7 +69,7 @@ namespace Battle.UnitCore.Actions {
 			BattleSystem.SetApHud((int)price);
 			area = Instantiate(cont.circleArea).transform;
 			AreaSetPosition();
-			area.localScale = Vector3.one * maxDistance;
+			area.localScale = Vector3.one * maxDistance*2;
 			unit.state.animEvent.AddFunc("shoot", CreateArrow);
 		}
 		void AreaSetPosition() {

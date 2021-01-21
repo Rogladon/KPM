@@ -13,6 +13,9 @@ public class AnimationEvent : MonoBehaviour
 		}
 	}
 	public void AddFunc(string name, Func func) {
-		functions.Add(name, func);
+		if (functions.ContainsKey(name))
+			functions[name] = func;
+		else
+			functions.Add(name, func);
 	}
 }

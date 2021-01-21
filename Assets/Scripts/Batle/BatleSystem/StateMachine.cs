@@ -105,6 +105,11 @@ namespace Battle.UnitCore {
 			ResetState();
 		}
 
+		public float GetTime(string state) {
+			if (!animations.ContainsKey(state)) return 0.01f;
+			return animations[state].clips[0].length;
+		}
+
 		//TOODOO
 		/*
 		 * Кароч тут надо бы дописать систему с составными анимациями,
