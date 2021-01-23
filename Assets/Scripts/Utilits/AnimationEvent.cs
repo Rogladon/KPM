@@ -61,5 +61,14 @@ namespace Battle.UnitCore {
 				Debug.Log($"Events {name} doesn`t added, because event missing!");
 			}
 		}
+		public float GetTime(string name) {
+			Event ev = events.Find(p => p.nameEvent == name);
+			if (ev != null) {
+				return ev.position;
+			} else {
+				Debug.Log($"Events {name} doesn`t time, because event missing!");
+			}
+			return 0;
+		}
 	}
 }

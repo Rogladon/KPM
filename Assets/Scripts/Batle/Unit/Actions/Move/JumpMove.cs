@@ -18,9 +18,6 @@ namespace Battle.UnitCore.Actions {
 		float _distance;
 		[SerializeField]
 		float height;
-		//TOODOO расчет скорости
-		[SerializeField]
-		float speedheight = 0.1f;
 
 		protected float distance => _distance;
 		BattleStaticContainer cont => BattleStaticContainer.instance;
@@ -33,37 +30,44 @@ namespace Battle.UnitCore.Actions {
 			fly = true;
 			unit.agent.destination = position.Value;
 			unit.agent.enabled = false;
+			unit.transform.LookAt(new Vector3(position.Value.x, unit.position.y, position.Value.z));
 			StartCoroutine(Fly());
 		}
 
 		protected IEnumerator Fly() {
-			int countStep = (int)(unit.state.GetTime(nameAnimation) / Time.deltaTime);
-			if (countStep == 0) {
-				unit.position = position.Value;
-				fly = false;
-				yield return null;
-			}
-			float speed = Vector3.Distance(unit.position, position.Value) / countStep;
-			int step = 0;
+			float speed = Vector3.Distance(unit.position, position.Value) / (GetTime("endJump") - GetTime("startJump"));
+			float speedHeightUp = (height - unit.position.y) / (GetTime("middleJump") - GetTime("startJump"));
+			float speeedHeightDown = (height - unit.position.y) / (GetTime("endJump") - GetTime("middleJump"));
+			int act = -2;
+			unit.state.animEvent.AddFunc("startJump", () => { act=0; });
+			unit.state.animEvent.AddFunc("middleJump", () => { act = 1; });
+			unit.state.animEvent.AddFunc("endJump", () => { act = -1; });
 			Vector3 direction = (position.Value - unit.position).normalized;
 			yield return new WaitUntil(() => {
-				unit.position += direction * speed;
-				Vector3 p = unit.position;
-				p.x = 0; p.z = 0;
-				Vector3 h = step < countStep / 2 ? new Vector3(0, height, 0):Vector3.zero;
-				Vector3 pos = Vector3.Lerp(p, h, speedheight);
-				Debug.Log($"{pos}  {h} {p}");
-				pos.x =  unit.position.x; pos.z = unit.position.z;
-				unit.position = pos;
-				step++;
-				if (step > countStep) {
-					return true;
+				Vector3 pos;
+				switch (act) {
+					case 0:
+						pos = unit.position + direction * speed * Time.deltaTime;
+						pos.y += speedHeightUp * Time.deltaTime;
+						unit.position = pos;
+						break;
+					case 1:
+						pos = unit.position + direction * speed * Time.deltaTime;
+						pos.y -= speeedHeightDown * Time.deltaTime;
+						unit.position = pos;
+						break;
 				}
-				return false;
+				if(act == -1) {
+					return true;
+				} else {
+					return false;
+				}
 			});
 			fly = false;
 			unit.agent.enabled = true;
 		}
+
+		private float GetTime(string name) => unit.state.animEvent.GetTime(name);
 
 		public bool isActive() {
 			return true;
