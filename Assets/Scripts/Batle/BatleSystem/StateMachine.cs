@@ -44,9 +44,7 @@ namespace Battle.UnitCore {
 
 		private void Start() {
 			anim = GetComponentInChildren<Animation>();
-			AnimationEvent ae;
-			anim.TryGetComponent(out ae);
-			animEvent = ae;
+			
 			foreach(var p in animations) {
 				for(int i = 0; i< p.Value.clips.Count; i++) {
 					//TOODOO
@@ -55,6 +53,11 @@ namespace Battle.UnitCore {
 					else
 						anim.AddClip(p.Value[i], $"{p.Key}");
 				}
+			}
+			AnimationEvent ae;
+			if (anim.TryGetComponent(out ae)) {
+				animEvent = ae;
+				animEvent.Init(anim, animations.Values.ToList());
 			}
 			ResetState();
 		}
