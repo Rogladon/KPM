@@ -76,7 +76,10 @@ namespace Battle.UnitCore.Buffs {
 		}
 
 		public void OnStartStep() {
-			
+			countStep--;
+			if(countStep <= 0) {
+				unit.RemoveBuff(this);
+			}
 		}
 
 		public void OnUpdate() {

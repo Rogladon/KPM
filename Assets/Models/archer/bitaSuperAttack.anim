@@ -27224,7 +27224,7 @@ AnimationClip:
   m_Events:
   - time: 1.6683333
     functionName: FireEvent
-    data: Hit
+    data: hit
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0

@@ -16,19 +16,30 @@ namespace Battle.UnitCore.Actions {
 		protected int damage => (int)(_damage * unit.unitState.strenght);
 
 		protected Unit target;
+		private Unit enemy;
 		BattleStaticContainer cont => BattleStaticContainer.instance;
 		public void Action() {
 			if (!target) return;
 			if (price > unit.ap) return;
 			//TOODOO
 			if(Vector3.Distance(target.position, unit.position) < maxDistance) {
-				target.Hit(damage);
+				enemy = target;
+				unit.state.animEvent.AddFunc("hit", Hit);
 				Vector3 posLook = target.position;
 				posLook.y = unit.position.y;
 				unit.transform.LookAt(posLook);
 				unit.Action((int)price);
-				unit.state.PlaySinglton(nameAnimation);
+				StartCoroutine(Attack());
 			}
+		}
+		private void Hit() {
+			enemy.Hit(damage);
+		}
+		bool _isLock = false;
+		IEnumerator Attack() {
+			_isLock = true;
+			yield return unit.state.WaitPlaySinglton(nameAnimation);
+			_isLock = false;
 		}
 
 		public bool isActive() {
@@ -36,7 +47,7 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public bool isLock() {
-			return false;
+			return _isLock;
 		}
 
 		public void OnAwake(Unit unit) {

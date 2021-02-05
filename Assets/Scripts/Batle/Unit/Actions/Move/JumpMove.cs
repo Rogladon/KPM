@@ -11,10 +11,6 @@ namespace Battle.UnitCore.Actions {
 		//LineRenderer line;
 		Transform aim;
 		[SerializeField]
-		Color defaultColor;
-		[SerializeField]
-		Color notApColor;
-		[SerializeField]
 		float _distance;
 		[SerializeField]
 		float height;
@@ -27,6 +23,7 @@ namespace Battle.UnitCore.Actions {
 			if (!position.HasValue) return;
 			if (price > unit.ap) return;
 			unit.state.PlaySinglton(nameAnimation);
+			unit.Action((int)price);
 			fly = true;
 			unit.agent.destination = position.Value;
 			unit.agent.enabled = false;

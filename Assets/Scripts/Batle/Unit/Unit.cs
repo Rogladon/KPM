@@ -70,6 +70,8 @@ namespace Battle.UnitCore {
 		#endregion
 
 		#region Components
+		[SerializeField]
+		Transform buffDomain;
 		public NavMeshAgent agent { get; private set; }
 		public StateMachine state { get; private set; }
 		#endregion
@@ -133,7 +135,10 @@ namespace Battle.UnitCore {
 
 		#region BattleLogic
 		public void ResetAllAction() {
-			actions.ForEach(p => p.OnResetSelf());
+			if (currentAction != null) {
+				currentAction.OnResetSelf();
+				currentAction = null;
+			}
 		}
 		public void OnStartStep() {
 			HeelAp();
@@ -173,6 +178,7 @@ namespace Battle.UnitCore {
 		#region UnitLogic
 		public void Hit(int dmg) {
 			hp -= dmg - (int)(dmg*((float)unitState.defense/100f));
+			state.PlaySinglton("hit");
 		}
 		public void Action(int ap) {
 			this.ap -= ap;
@@ -188,12 +194,12 @@ namespace Battle.UnitCore {
 			ap += unitState.heelAp;
 		}
 		public void AddBuff(IBuff buff) {
-			buffs.Add(buff);
-			buff.OnAwake(this);
+			var go = Instantiate(buff as Buff, buffDomain).GetComponent<IBuff>();
+			buffs.Add(go);
+			go.OnAwake(this);
 		}
 		public void AddBuff(List<IBuff> buff) {
-			buffs.AddRange(buff);
-			buff.ForEach(p => p.OnAwake(this));
+			buff.ForEach(p => AddBuff(p));
 		}
 		public void RemoveBuff(IBuff buff) {
 			buffs.Remove(buff);

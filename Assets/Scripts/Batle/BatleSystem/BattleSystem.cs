@@ -51,11 +51,10 @@ namespace Battle.System {
 			}
 		}
 		IEnumerator Step() {
-			battleHUD.SetTeam(currentTeam);
+			
 			Debug.Log($"Start step team {currentTeam}");
 
-			AllUnits.Where(p => p.team == currentTeam).ToList().
-				ForEach(p => p.OnStartStep());
+			
 			yield return new WaitUntil(() => {
 				Unit unit = GetUnitMouse(currentTeam, UnitFindFlag.With);
 				if (!unit) return false;
@@ -88,6 +87,9 @@ namespace Battle.System {
 			if(currentUnit)
 				currentUnit.Disactive();
 			battleHUD.ResetUnit();
+			battleHUD.SetTeam(currentTeam);
+			AllUnits.Where(p => p.team == currentTeam).ToList().
+				ForEach(p => p.OnStartStep());
 			StartCoroutine(Step());
 		}
 

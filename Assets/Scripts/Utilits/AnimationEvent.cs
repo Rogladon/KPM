@@ -54,9 +54,9 @@ namespace Battle.UnitCore {
 			}
 		}
 		public void AddFunc(string name, Event.Func func) {
-			Event ev = events.Find(p => p.nameEvent == name);
+			var ev = events.FindAll(p => p.nameEvent == name);
 			if (ev != null) {
-				ev.func = func;
+				ev.ForEach(p => p.func = func);
 			} else {
 				Debug.Log($"Events {name} doesn`t added, because event missing!");
 			}

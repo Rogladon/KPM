@@ -21,8 +21,11 @@ namespace Battle.System {
 
 		RectTransform rect => GetComponent<RectTransform>();
 
-
+		Unit unit;
+		Vector2 pos;
 		public void SetInfo(Unit unit, Vector2 pos) {
+			this.unit = unit;
+			this.pos = pos;
 			gameObject.SetActive(true);
 			rect.anchoredPosition = pos+rect.sizeDelta;
 			textTeam.text = $"Team: {unit.team}";
@@ -32,6 +35,9 @@ namespace Battle.System {
 			defense.text = $"Защита: {unit.unitState.defense}";
 			heelHp.text = $"Восстановление AP: {unit.unitState.heelAp}";
 			nameUnit.text = unit.unitInfo.nameUnit;
+		}
+		void Update() {
+			SetInfo(unit, pos);
 		}
 		public void ResetInfo() {
 			gameObject.SetActive(false);

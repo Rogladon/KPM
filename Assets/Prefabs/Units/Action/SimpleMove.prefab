@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   icon: {fileID: 21300000, guid: 5c509296d0c9bfe4b96af33df62a109a, type: 3}
-  nameSkill: SimpleMove
-  description: Move
+  nameSkill: "\u0411\u0435\u0433"
+  description: "\u0411\u0435\u0436\u0438\u0442"
   price: 1
+  nameAnimation: run
   defaultColor: {r: 0.06272149, g: 1, b: 0, a: 1}
   notApColor: {r: 1, g: 0, b: 0, a: 1}
-  multiply: 3
+  multiply: 1

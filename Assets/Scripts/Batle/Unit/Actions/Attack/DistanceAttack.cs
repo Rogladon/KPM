@@ -39,8 +39,7 @@ namespace Battle.UnitCore.Actions {
 			yield return unit.state.WaitPlaySinglton(nameAnimation);
 			Debug.Log("Distance Attack animation complete");
 			if (a == null) {
-				a = arrow.Create(unit.position, target.position);
-				
+				CreateArrow();
 			}
 			yield return a.WaitTargetHit();
 			target.Hit(damage);

@@ -6,11 +6,22 @@ using Battle.System;
 
 namespace Battle.UnitCore.Actions {
 	public class BuffAction : Action, IAction {
+		public enum Type {
+			self,
+			enemy,
+			friendly,
+			all
+		}
+		[SerializeField]
+		Type type;
 		private Unit target;
 		bool _isLock = false;
 		public void Action() {
+			if (price > unit.ap) return;
 			if (target) {
 				StartCoroutine(Buff());
+				unit.HoverOut();
+				unit.ResetAllAction();
 			}
 		}
 
@@ -56,7 +67,22 @@ namespace Battle.UnitCore.Actions {
 		}
 
 		public void OnUpdate() {
-			target = BattleSystem.GetUnitMouse(unit.team, UnitFindFlag.Without);
+			switch (type) {
+				case Type.self:
+					target = unit;
+					unit.HoverOn();
+					break;
+				case Type.enemy:
+					target = BattleSystem.GetUnitMouse(unit.team, UnitFindFlag.Without);
+					break;
+				case Type.friendly:
+					target = BattleSystem.GetUnitMouse(unit.team, UnitFindFlag.With);
+					break;
+				case Type.all:
+					target = BattleSystem.GetUnitMouse();
+					break;
+			}
+			
 		}
 	}
 }
